@@ -16,6 +16,12 @@ variable "discord_public_key" {
   default     = "cddda14317eaeda2763d624c4df5b2047c8c1e132dacd5c1f8fc9d77966f0882"
 }
 
+variable "discord_application_id" {
+  description = "Discord Application ID, used to build the interaction webhook URL for deferred follow-up messages. Not a secret — it's the same ID visible in the invite link and API paths."
+  type        = string
+  default     = "1538725606743736330"
+}
+
 variable "raw_image_retention_days" {
   description = "Number of days to retain raw uploaded photos before S3 expires them"
   type        = number

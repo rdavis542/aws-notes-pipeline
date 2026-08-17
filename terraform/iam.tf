@@ -27,6 +27,16 @@ data "aws_iam_policy_document" "discord_interaction" {
     actions   = ["s3:PutObject"]
     resources = ["${aws_s3_bucket.raw_images.arn}/*"]
   }
+
+  statement {
+    # Discord requires an ACK within 3 seconds. The handler responds
+    # immediately with a deferred message and re-invokes itself
+    # asynchronously to do the slow work (download + S3 upload), then
+    # edits the original message via Discord's webhook API.
+    sid       = "SelfInvokeForDeferredFollowup"
+    actions   = ["lambda:InvokeFunction"]
+    resources = ["arn:aws:lambda:${var.region}:${data.aws_caller_identity.current.account_id}:function:${var.project_name}-discord-interaction"]
+  }
 }
 
 resource "aws_iam_role_policy" "discord_interaction" {

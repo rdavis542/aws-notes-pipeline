@@ -26,7 +26,7 @@ Terraform infrastructure for transcribing photos of handwritten notes into text 
 ```
 
 - **S3 (raw-images)** — private bucket this project owns; landing zone for phone photos, objects expire after `raw_image_retention_days`.
-- **Lambda (discord-interaction)** — verifies Discord's Ed25519 request signature with `tweetnacl`, downloads the attachment from Discord's CDN, and replies within Discord's 3-second interaction window.
+- **Lambda (discord-interaction)** — verifies Discord's Ed25519 request signature with `tweetnacl`, acknowledges `/note` immediately with a deferred response, then re-invokes itself asynchronously to download the attachment from Discord's CDN, write it to S3, and edit the original message via Discord's webhook API once done.
 - **Lambda (transcribe)** — calls Amazon Textract's `DetectDocumentText` (which classifies each line `PRINTED` or `HANDWRITING`), joins the `LINE` blocks in reading order, and writes a `.txt` file.
 - **Website bucket + CloudFront** — not managed here. This project reads the bucket name and distribution ID from [`aws-static-site`](../aws-static-site)'s Terraform state via `terraform_remote_state`, so it never hardcodes them.
 
@@ -99,7 +99,6 @@ terraform apply -var="discord_public_key=<your-discord-public-key>"
 
 ## Known limitations (v1)
 
-- **3-second response window**: the interaction Lambda downloads the attachment and writes to S3 synchronously, inside Discord's 3-second interaction deadline. On a slow attachment download, Discord may show the command as failed even though the photo was received. A deferred-response pattern (ack immediately, follow up via webhook) would remove this constraint if it becomes a problem in practice.
 - **No index/manifest**: transcripts are written as standalone `.txt` files with no generated list of past notes. Add a manifest (JSON or DynamoDB) later if the site needs to browse/list them.
 - **Textract handwriting accuracy**: works best on clear printed handwriting; cursive is noticeably less reliable. Worth testing against real note pages before relying on it.
 

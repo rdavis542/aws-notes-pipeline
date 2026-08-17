@@ -21,8 +21,9 @@ resource "aws_lambda_function" "discord_interaction" {
 
   environment {
     variables = {
-      DISCORD_PUBLIC_KEY = var.discord_public_key
-      RAW_IMAGES_BUCKET  = aws_s3_bucket.raw_images.id
+      DISCORD_PUBLIC_KEY     = var.discord_public_key
+      DISCORD_APPLICATION_ID = var.discord_application_id
+      RAW_IMAGES_BUCKET      = aws_s3_bucket.raw_images.id
     }
   }
 
