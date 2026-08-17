@@ -11,9 +11,9 @@ variable "project_name" {
 }
 
 variable "discord_public_key" {
-  description = "Discord Application's Public Key, used to verify interaction request signatures (Developer Portal > General Information)"
+  description = "Discord Application's Public Key, used to verify interaction request signatures (Developer Portal > General Information). Not a secret — it only verifies signatures, it cannot forge them — so it's safe to default here rather than pass through CI secrets plumbing."
   type        = string
-  sensitive   = true
+  default     = "cddda14317eaeda2763d624c4df5b2047c8c1e132dacd5c1f8fc9d77966f0882"
 }
 
 variable "raw_image_retention_days" {
