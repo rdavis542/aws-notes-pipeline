@@ -21,4 +21,5 @@ jobs:
       id-token: write
     with:
       aws_region: us-east-1
+      tf_vars: '{"discord_public_key":"${{ secrets.DISCORD_PUBLIC_KEY }}"}'
     secrets: inherit
