@@ -1,0 +1,25 @@
+name: Security Scanning (tfsec)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/tfsec.yml'
+  pull_request:
+    branches: ["main"]
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/tfsec.yml'
+  schedule:
+    - cron: '31 12 * * 0'
+  workflow_dispatch:
+
+jobs:
+  security:
+    uses: rdavis542/aws-github-workflows/.github/workflows/tfsec.yml@main
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      pull-requests: write

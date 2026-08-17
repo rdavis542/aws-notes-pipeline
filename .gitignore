@@ -1,0 +1,24 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl
+
+# Sensitive variables
+*.tfvars
+!example.tfvars
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Lambda build artifacts
+terraform/build/
+
+# Lambda dependencies (installed via npm install before terraform apply)
+src/**/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

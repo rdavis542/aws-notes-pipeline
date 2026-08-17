@@ -1,0 +1,12 @@
+{
+  "name": "transcribe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Runs Textract handwriting detection on a raw photo and writes the transcript into the website bucket",
+  "dependencies": {
+    "@aws-sdk/client-cloudfront": "^3.600.0",
+    "@aws-sdk/client-s3": "^3.600.0",
+    "@aws-sdk/client-textract": "^3.600.0"
+  }
+}

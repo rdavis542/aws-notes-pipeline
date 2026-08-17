@@ -1,0 +1,32 @@
+name: "AWS Notes Pipeline Build"
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - 'terraform/**'
+      - 'src/**'
+      - '.github/workflows/tf-create.yml'
+  pull_request:
+    branches: ["main"]
+    paths:
+      - 'terraform/**'
+      - 'src/**'
+  workflow_dispatch:
+    inputs:
+      plan_only:
+        description: 'Run plan only, skip apply'
+        type: boolean
+        default: false
+
+jobs:
+  terraform:
+    uses: rdavis542/aws-github-workflows/.github/workflows/tf-plan-apply.yml@main
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    with:
+      aws_region: us-east-1
+      plan_only: ${{ github.event.inputs.plan_only == 'true' }}
+    secrets: inherit
